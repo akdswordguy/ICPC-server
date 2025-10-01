@@ -8,9 +8,12 @@ app.use(bodyParser.json());
 let hashes = {};
 
 app.post("/hash", (req, res) => {
-  const { hash, timestamp } = req.body;
+  const { hash, timestamp, codechef_id } = req.body;
   hashes[timestamp] = hash;
   console.log("Received hash:", hash);
+  if (codechef_id) {
+    console.log("Received CodeChef ID:", codechef_id);
+  }
   res.json({ status: "ok" });
 });
 
