@@ -35,7 +35,7 @@ This server receives and verifies hashes (and optionally CodeChef IDs) for ICPC 
   {
     "hash": "<hash>",
     "timestamp": "<timestamp>",
-    "codechef_id": "<codechef_id>" // optional
+    "codechef_id": "<codechef_id>" 
   }
   ```
 - **Response:** `{ "status": "ok" }`
