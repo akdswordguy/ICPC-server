@@ -1,6 +1,5 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-const crypto = require("crypto");
 
 const app = express();
 app.use(bodyParser.json());
@@ -8,19 +7,18 @@ app.use(bodyParser.json());
 let hashes = {};
 
 app.post("/hash", (req, res) => {
-  const { hash, timestamp, codechef_id } = req.body;
-  hashes[timestamp] = hash;
-  console.log("Received hash:", hash);
-  if (codechef_id) {
-    console.log("Received CodeChef ID:", codechef_id);
+  const { codechef_id, video_file_hash } = req.body;
+  if (!codechef_id || !video_file_hash) {
+    return res.status(400).json({ status: "error", message: "Missing codechef_id or video_file_hash" });
   }
+  hashes[codechef_id] = video_file_hash;
+  console.log(`Received hash for ${codechef_id}: ${video_file_hash}`);
   res.json({ status: "ok" });
 });
 
-// When video is uploaded, recompute hash
 app.post("/verify", (req, res) => {
-  const { timestamp, videoHash } = req.body;
-  if (hashes[timestamp] && hashes[timestamp] === videoHash) {
+  const { codechef_id, video_file_hash } = req.body;
+  if (hashes[codechef_id] && hashes[codechef_id] === video_file_hash) {
     return res.json({ valid: true });
   }
   res.json({ valid: false });
