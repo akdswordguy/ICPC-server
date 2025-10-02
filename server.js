@@ -4,11 +4,11 @@ const multer = require("multer");
 const fs = require("fs");
 const crypto = require("crypto");
 const cors = require('cors');
-app.use(cors());
+
 
 const app = express();
 app.use(bodyParser.json());
-
+app.use(cors());
 // Temporary folder for uploaded videos
 const upload = multer({ dest: "uploads/" });
 
@@ -73,3 +73,4 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
+
