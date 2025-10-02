@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Video Upload Verification</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .upload-box {
+      background: white;
+      padding: 20px 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      width: 400px;
+      text-align: center;
+    }
+    input[type="text"], input[type="file"] {
+      width: 100%;
+      margin: 10px 0;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    button {
+      padding: 10px 20px;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+    #result {
+      margin-top: 15px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="upload-box">
+    <h2>Upload & Verify Video</h2>
+    <form id="uploadForm">
+      <input type="text" name="codechef_id" placeholder="Enter CodeChef ID" required>
+      <input type="file" name="video" accept="video/*" required>
+      <button type="submit">Upload & Verify</button>
+    </form>
+    <div id="result"></div>
+  </div>
+
+  <script>
+    const form = document.getElementById("uploadForm");
+    const resultBox = document.getElementById("result");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const formData = new FormData(form);
+
+      resultBox.textContent = "Uploading and verifying...";
+      
+      try {
+        const res = await fetch("https://icpc-server.onrender.com/upload", {
+          method: "POST",
+          body: formData
+        });
+        const data = await res.json();
+        if (data.valid) {
+          resultBox.textContent = " Video verified successfully!";
+          resultBox.style.color = "green";
+        } else {
+          resultBox.textContent = "Verification failed. " + (data.message || "");
+          resultBox.style.color = "red";
+        }
+      } catch (err) {
+        resultBox.textContent = " Error: " + err.message;
+        resultBox.style.color = "orange";
+      }
+    });
+  </script>
+</body>
+</html>
